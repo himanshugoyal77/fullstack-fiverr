@@ -13,15 +13,22 @@ import Orders from "./pages/orders/Orders";
 import Messages from "./pages/messages/Messages";
 import Message from "./pages/message/Message";
 import MyGigs from "./pages/myGigs/MyGigs";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import Pay from "./components/pay/Pay";
+import Success from "./components/pay/Success";
+
+const queryClient = new QueryClient();
 
 function App() {
   const Layout = () => {
     return (
-      <div className="app">
-        <Navbar />
-        <Outlet />
-        <Footer />
-      </div>
+      <QueryClientProvider client={queryClient} contextSharing={true}>
+        <div className="app">
+          <Navbar />
+          <Outlet />
+          <Footer />
+        </div>
+      </QueryClientProvider>
     );
   };
 
@@ -69,6 +76,14 @@ function App() {
         {
           path: "/login",
           element: <Login />,
+        },
+        {
+          path: "/pay/:id",
+          element: <Pay />,
+        },
+        {
+          path: "/success",
+          element: <Success />,
         },
       ],
     },

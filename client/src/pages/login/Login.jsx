@@ -1,46 +1,49 @@
-import React, {useState} from "react"
-import axios from "axios"
-import {useNavigate} from 'react-router-dom'
-import "./Login.scss"
-import newRequests from "../../utils/newRequests"
+import React, { useState } from "react";
+import "./Login.scss";
+import newRequests from "../../utils/newRequests";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
- const [username, setUsername] = useState("")
- const [password, setPassword] = useState("")
- const [error, setError] = useState("")
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
- const navigator = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await newRequests.post("/auth/login", {
-        username,
-        password,
-      })
-      localStorage.setItem("currentUser", JSON.stringify(res.data))
-      navigator("/")
-    }catch(err) {
-      setError(err.response.data)
-      console.log(err)
+      const res = await newRequests.post("/auth/login", { username, password });
+      localStorage.setItem("currentUser", JSON.stringify(res.data));
+      navigate("/");
+    } catch (err) {
+      setError(err.response.data);
     }
-  }
+  };
 
   return (
     <div className="login">
-      <form action="" onSubmit={handleSubmit}>
-         <h1>Sign In</h1>
-         <label htmlFor="">Username</label>
-         <input type="text" name="username" placeholder="" onChange={e => setUsername(e.target.value)} />
+      <form onSubmit={handleSubmit}>
+        <h1>Sign in</h1>
+        <label htmlFor="">Username</label>
+        <input
+          name="username"
+          type="text"
+          placeholder="johndoe"
+          onChange={(e) => setUsername(e.target.value)}
+        />
 
-          <label htmlFor="">Password</label>
-          <input type="password" name="password" placeholder=""  onChange={e => setPassword(e.target.value)}/>
-
-          <button type="submit" >Login</button>
-          {error && error}
+        <label htmlFor="">Password</label>
+        <input
+          name="password"
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Login</button>
+        {error && error}
       </form>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

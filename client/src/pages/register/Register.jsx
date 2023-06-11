@@ -3,8 +3,10 @@ import axios from "axios";
 import "./Register.scss";
 import upload from "../../utils/upload";
 import newRequests from "../../utils/newRequests";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [user, setUser] = useState({
     username: "",
@@ -18,40 +20,39 @@ function Register() {
 
   const handleChange = (e) => {
     e.preventDefault();
-    setUser(prev => {
+    setUser((prev) => {
       return {
         ...prev,
         [e.target.name]: e.target.value,
       };
     });
- //   setUser({...user, [e.target.name]: e.target.value})
-  }
+    //   setUser({...user, [e.target.name]: e.target.value})
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const url = await upload(file);
 
-    try{
-   await newRequests.post("/auth/register", {
-    ...user, img:url
-   })
-    }catch(err) {
-      console.log(err)
+    try {
+      await newRequests.post("/auth/register", {
+        ...user,
+        img: url,
+      });
+      navigate("/");
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
 
   const handleSeller = (e) => {
     e.preventDefault();
-    setUser(prev => {
+    setUser((prev) => {
       return {
         ...prev,
         isSeller: e.target.checked,
       };
     });
-  }
-
-
-
+  };
 
   return (
     <div className="register">
@@ -59,17 +60,9 @@ function Register() {
         <div className="left">
           <h1>Create a new account</h1>
           <label htmlFor="">Username</label>
-          <input
-            name="username"
-            type="text"
-            onChange={handleChange}
-          />
+          <input name="username" type="text" onChange={handleChange} />
           <label htmlFor="">Email</label>
-          <input
-            name="email"
-            type="email"
-            onChange={handleChange}
-          />
+          <input name="email" type="email" onChange={handleChange} />
           <label htmlFor="">Password</label>
           <input name="password" type="password" onChange={handleChange} />
           <label htmlFor="">Profile Picture</label>
